@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import type { StudentResult } from "./types.ts";
+import { mockResults } from "./data.ts";
 
 export default function App() {
   const [rollNo, setRollNo] = useState("");
@@ -41,19 +42,16 @@ export default function App() {
     setResult(null);
     setCollegeResults(null);
 
-    try {
-      const response = await fetch(`/api/results?rollNo=${rollNo}&session=${session}`);
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Result Not Found");
+    // Simulate network latency
+    setTimeout(() => {
+      const foundResult = mockResults.find(r => r.rollNo === rollNo && (!session || r.session === session));
+      if (foundResult) {
+        setResult(foundResult);
+      } else {
+        setError("Result Not Found");
       }
-      const data = await response.json();
-      setResult(data);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
       setLoading(false);
-    }
+    }, 400);
   };
 
   const fetchCollegeResult = async (e?: FormEvent) => {
@@ -68,19 +66,16 @@ export default function App() {
     setResult(null);
     setCollegeResults(null);
 
-    try {
-      const response = await fetch(`/api/college-results?college=${encodeURIComponent(college)}&session=${session}`);
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "No results found for this college");
+    // Simulate network latency
+    setTimeout(() => {
+      const results = mockResults.filter(r => r.college === college && (!session || r.session === session));
+      if (results.length > 0) {
+        setCollegeResults(results);
+      } else {
+        setError("No results found for this college");
       }
-      const data = await response.json();
-      setCollegeResults(data);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
       setLoading(false);
-    }
+    }, 400);
   };
 
   const handlePrint = () => {
