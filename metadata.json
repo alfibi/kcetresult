@@ -1,0 +1,8 @@
+{
+  "name": "Kashmir University Result Portal",
+  "description": "A portal for viewing B.Tech 3rd Semester results, similar to the egov.uok.edu.in system.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
